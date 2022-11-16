@@ -1,0 +1,17 @@
+.element__button {
+  background-color: #FFFFFF;
+  background-image: url(../../../images/element-button.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 22px;
+  height: 19px;
+  border: none;
+  align-self: center;
+  padding: 0;
+}
+
+.element__button:hover {
+  opacity: 0.6;
+  transition-duration: .5s;
+}

@@ -1,0 +1,25 @@
+.profile__button {
+  margin: 16px 0 0 0;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  background-color: black;
+  background-image: url(../../../images/profile-button.png);
+  background-position: center;
+  border: none;
+  background-size: 100%;
+  z-index: 1;
+}
+
+.profile__button:hover {
+  opacity: 0.6;
+  transition-duration: .5s;
+}
+
+@media all and (max-width: 767.9px) {
+  .profile__button {
+    margin-top: 8px;
+    width: 18px;
+    height: 18px;
+  }
+}

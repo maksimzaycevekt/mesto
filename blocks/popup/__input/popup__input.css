@@ -1,0 +1,22 @@
+.popup__input {
+  margin: 0 auto 30px;
+  width: 358px;
+  height: 27px;
+  border: none;
+  outline: none;
+  background-image: url(../../../images/popup-input.png);
+  background-position: left bottom;
+  background-repeat: no-repeat;
+}
+
+.popup__input:last-of-type {
+  margin-bottom: 0;
+}
+
+@media all and (max-width: 767.9px) {
+  .popup__input {
+    max-width: 238px;
+    height: 27px;
+  }
+}
+
