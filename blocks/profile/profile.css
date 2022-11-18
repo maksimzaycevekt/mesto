@@ -2,7 +2,8 @@
   max-width: 880px;
   margin: 0 auto 51px;
   display: grid;
-  grid-template-columns: 120px 366px 1fr;
+  grid-template-columns: 0.3fr 1fr 1fr;
+
 }
 
 @media all and (max-width: 1024px) {

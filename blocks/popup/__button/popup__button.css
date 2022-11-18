@@ -3,7 +3,7 @@
   height: 50px;
   margin: 48px auto 37px;
   padding: 0;
-  font-family: 'Inter';
+  font-family: 'Inter', Arial, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -12,15 +12,18 @@
   color: #FFFFFF;
   background-color: black;
   border-radius: 2px;
+  cursor: pointer;
+  transition-duration: .5s;
 }
 
 .popup__button:hover {
   opacity: 0.8;
-  transition-duration: .5s;
 }
 
 @media all and (max-width: 767.9px) {
   .popup__button {
+    font-size: 14px;
+    line-height: 17px;
     width: 238px;
     height: 46px;
     margin: 45px auto 25px;

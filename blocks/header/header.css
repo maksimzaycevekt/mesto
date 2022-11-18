@@ -4,9 +4,7 @@
   max-width: 880px;
   margin: 45px auto 40px;
   background-color: black;
-  background-image: url(../../images/header-line.png);
-  background-position: left bottom;
-  background-repeat: no-repeat;
+  border-bottom: 1px solid rgba(84, 84, 84, 0.7);
 }
 
 @media all and (max-width: 1024px) {

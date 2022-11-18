@@ -4,9 +4,13 @@
   height: 27px;
   border: none;
   outline: none;
-  background-image: url(../../../images/popup-input.png);
-  background-position: left bottom;
-  background-repeat: no-repeat;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
 }
 
 .popup__input:last-of-type {
@@ -16,7 +20,6 @@
 @media all and (max-width: 767.9px) {
   .popup__input {
     max-width: 238px;
-    height: 27px;
   }
 }
 
