@@ -12,6 +12,7 @@
   color: #FFFFFF;
   background-color: black;
   border-radius: 2px;
+  border: none;
   cursor: pointer;
   transition-duration: .5s;
 }
