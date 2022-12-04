@@ -15,7 +15,7 @@
         <div class="popup__container">
           <button class="popup__close-button" id="close-popup-profile" type="button" aria-label="Закрыть"></button>
           <h2 class="popup__text">Редактировать профиль</h2>
-          <form class="popup__form" name="popup-form" >
+          <form class="popup__form" id="popup-form-profile" name="popup-form" >
             <input class="popup__input popup__input_type_name" type="text" name="popup-name">
             <input class="popup__input popup__input_type_job" type="text" name="popup-job">
             <button class="popup__button" type="submit">Сохранить</button>
@@ -62,7 +62,7 @@
 
           <template class="element-template">
             <article class="element">
-              <img class="element__image">
+              <img class="element__image" alt="Описание карточки">
               <div class="element__container">
                 <h2 class="element__text">23</h2>
                 <button class="element__button" type="button" aria-label="Лайк"></button>

@@ -25,13 +25,13 @@ const initialCards = [
   }
 ];
 
-const elements = document.querySelector('.elements');
+const cardsContainer = document.querySelector('.elements');
 const elementContent = document.querySelector('.element-template').content;
-const popup = document.querySelector('#popup-profile');
+const popupProfile = document.querySelector('#popup-profile');
 const popupImg = document.querySelector('#popup-images');
-const formElement = document.querySelector('.popup__form');
-const buttonOpen = document.querySelector('.profile__button');
-const buttonClose = document.querySelector('#close-popup-profile');
+const popupProfileForm = document.querySelector('#popup-form-profile');
+const buttonOpenPopupProfileForm = document.querySelector('.profile__button');
+const buttonClosePopupProfileForm = document.querySelector('#close-popup-profile');
 const nameInput = document.querySelector('.popup__input_type_name');
 const jobInput = document.querySelector('.popup__input_type_job');
 const profileName = document.querySelector('.profile__title');
@@ -47,51 +47,48 @@ const popupImgSrc = document.querySelector('.popup__image');
 const popupImgText = document.querySelector('.popup__text_type_img');
 
 // передаёт данные input-ов в разметку
-function formSubmitHandler (evt) {
+function handleSubmitProfileFormInput (evt) {
   evt.preventDefault();
   profileName.textContent = nameInput.value;
   profileJob.textContent = jobInput.value;
-  popupClose();
+  handleClickClosePopupProfileForm();
 }
 
-//добавляет в разметку карточку через popup
-function formSubmitImage (evt) {
-  evt.preventDefault();
-  const addCardsElement = elementContent.cloneNode(true);
-  addCardsElement.querySelector('.element__text').textContent = imageName.value;
-  addCardsElement.querySelector('.element__image').src = imageLink.value;
-  elements.prepend(addCardsElement);
-  popupCloseImg();
+// ф-я открытия попапа для модальных окон
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
+}
+
+// ф-я заккрытия попапа для модальных окон
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
 }
 
 //ф-я открытия попапа для ред. профиля
-function popupOpen() {
-  popup.classList.add('popup_opened');
+function handleClickOpenPopupProfileForm() {
+  openPopup(popupProfile);
   nameInput.value = profileName.textContent;
   jobInput.value = profileJob.textContent;
 }
 
 //ф-я закрытия попапа для ред. профиля
-function popupClose() {
-  popup.classList.remove('popup_opened');
+function handleClickClosePopupProfileForm() {
+  closePopup(popupProfile);
 }
 
 //ф-я открытия для формы ред картинок
-function popupOpenimg() {
-  popupImg.classList.add('popup_opened');
+function handlClickeOpenPopupImgageEditForm() {
+  openPopup(popupImg);
 }
 
 //ф-я закрытия попапа для формы ред картинок
-function popupCloseImg() {
-  popupImg.classList.remove('popup_opened');
+function handleClickClosePopupImgageEditForm() {
+  closePopup(popupImg);
 }
 
-//ф-я закрытия попапа с картинкой + очистка полей
-function popupCloseWindow() {
-  popupImgOpen.classList.remove('popup_opened');
-  popupImgSrc.src = '';
-  popupImgText.textContent = '';
-
+//ф-я закрытия попапа с картинкой
+function handleCkickClosePopupImageModalWindow() {
+  closePopup(popupImgOpen);
 }
 
 //интегрирует в разметку карточки из массива через DOM
@@ -115,35 +112,72 @@ initialCards.forEach(function (element) {
 
   //передаёт картинку карточки в попап по клику
   cardsElement.querySelector('.element__image').addEventListener('click', function(evt){
-    let target = evt.target;
-    popupImgSrc.src = target.src;
+    popupImgSrc.src = element.link
+    popupImgSrc.alt = element.name
   });
 
   //открывает попап по клику картинки в карточках
   cardsElement.querySelector('.element__image').addEventListener('click', function(evt){
-    let target = evt.target;
-    target = popupImgOpen.classList.add('popup_opened');
-    let targetElement = evt.target.closest('.element');
-    let targetText = targetElement.querySelector('.element__text');
+    openPopup(popupImgOpen);
+    const targetElement = evt.target.closest('.element');
+    const targetText = targetElement.querySelector('.element__text');
     popupImgText.textContent = targetText.textContent;
   });
 
-  elements.append(cardsElement);
+  cardsContainer.append(cardsElement);
 });
 
+//добавляет в разметку карточку через popup
+function handleSubmitImageForm (evt) {
+  evt.preventDefault();
+  const addCardsElement = elementContent.cloneNode(true);
+  addCardsElement.querySelector('.element__text').textContent = imageName.value;
+  addCardsElement.querySelector('.element__image').src = imageLink.value;
+  addCardsElement.querySelector('.element__image').alt = imageName.value;
+
+  //добавляет возможность ставить лайк на карточках
+  addCardsElement.querySelector('.element__button').addEventListener('click', function (evt) {
+    evt.target.classList.toggle('element__button_active')
+  });
+
+  //добавляет возможность удалять карточки по клику на урну
+  addCardsElement.querySelector('.element__button-delite').addEventListener('click', function(evt) {
+    const target = evt.target;
+    const removeButton = target.closest('.element');
+    removeButton.remove();
+  });
+
+  //передаёт картинку карточки в попап по клику
+  addCardsElement.querySelector('.element__image').addEventListener('click', function(evt){
+    popupImgSrc.src = evt.target.src;
+    popupImgSrc.alt = evt.name;
+  });
+
+  //открывает попап по клику картинки в карточках
+  addCardsElement.querySelector('.element__image').addEventListener('click', function(evt){
+    openPopup(popupImgOpen);
+    const targetElement = evt.target.closest('.element');
+    const targetText = targetElement.querySelector('.element__text');
+    popupImgText.textContent = targetText.textContent;
+  });
+
+  cardsContainer.prepend(addCardsElement);
+  handleClickClosePopupImgageEditForm();
+};
+
 //слушатели для попапа ред профиля
-buttonOpen.addEventListener('click', popupOpen);
+buttonOpenPopupProfileForm.addEventListener('click', handleClickOpenPopupProfileForm);
 
-buttonClose.addEventListener('click', popupClose);
+buttonClosePopupProfileForm.addEventListener('click', handleClickClosePopupProfileForm);
 
-formElement.addEventListener('submit', formSubmitHandler);
+popupProfileForm.addEventListener('submit', handleSubmitProfileFormInput);
 
 //слушатели для попапа ред картинок
-buttonOpenImg.addEventListener('click', popupOpenimg);
+buttonOpenImg.addEventListener('click', handlClickeOpenPopupImgageEditForm);
 
-buttonCloseImg.addEventListener('click', popupCloseImg);
+buttonCloseImg.addEventListener('click', handleClickClosePopupImgageEditForm);
 
-formElementImg.addEventListener('submit', formSubmitImage);
+formElementImg.addEventListener('submit', handleSubmitImageForm);
 
 //слушатель для попапа с картинкой
-popupImgClose.addEventListener('click', popupCloseWindow);
+popupImgClose.addEventListener('click', handleCkickClosePopupImageModalWindow);
