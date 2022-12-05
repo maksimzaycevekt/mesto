@@ -91,77 +91,58 @@ function handleCkickClosePopupImageModalWindow() {
   closePopup(popupImgOpen);
 }
 
+
+//ф-я создания карточки
+function createCards(name, link) {
+  cardsElement = elementContent.cloneNode(true);
+  cardsElement.querySelector('.element__text').textContent = name;
+  cardsElement.querySelector('.element__image').src = link;
+  cardsElement.querySelector('.element__image').alt = name;
+
+//добавляет возможность ставить лайк на карточках
+cardsElement.querySelector('.element__button').addEventListener('click', function (evt) {
+  evt.target.classList.toggle('element__button_active')
+});
+
+//добавляет возможность удалять карточки по клику на урну
+cardsElement.querySelector('.element__button-delite').addEventListener('click', function(evt) {
+  const target = evt.target;
+  const removeButton = target.closest('.element');
+  removeButton.remove();
+});
+
+//передаёт картинку карточки в попап по клику
+cardsElement.querySelector('.element__image').addEventListener('click', function(evt){
+  popupImgSrc.src = link;
+  popupImgSrc.alt = name;
+});
+
+//открывает попап по клику картинки в карточках
+cardsElement.querySelector('.element__image').addEventListener('click', function(evt){
+  openPopup(popupImgOpen);
+  const targetElement = evt.target.closest('.element');
+  const targetText = targetElement.querySelector('.element__text');
+  popupImgText.textContent = targetText.textContent;
+});
+
+  return cardsElement;
+}
+
 //интегрирует в разметку карточки из массива через DOM
 initialCards.forEach(function (element) {
-  const cardsElement = elementContent.cloneNode(true);
 
-  cardsElement.querySelector('.element__text').textContent = element.name;
-  cardsElement.querySelector('.element__image').src = element.link;
-
-  //добавляет возможность ставить лайк на карточках
-  cardsElement.querySelector('.element__button').addEventListener('click', function (evt) {
-    evt.target.classList.toggle('element__button_active')
-  });
-
-  //добавляет возможность удалять карточки по клику на урну
-  cardsElement.querySelector('.element__button-delite').addEventListener('click', function(evt) {
-    const target = evt.target;
-    const removeButton = target.closest('.element');
-    removeButton.remove();
-  });
-
-  //передаёт картинку карточки в попап по клику
-  cardsElement.querySelector('.element__image').addEventListener('click', function(evt){
-    popupImgSrc.src = element.link
-    popupImgSrc.alt = element.name
-  });
-
-  //открывает попап по клику картинки в карточках
-  cardsElement.querySelector('.element__image').addEventListener('click', function(evt){
-    openPopup(popupImgOpen);
-    const targetElement = evt.target.closest('.element');
-    const targetText = targetElement.querySelector('.element__text');
-    popupImgText.textContent = targetText.textContent;
-  });
+  createCards(element.name, element.link)
 
   cardsContainer.append(cardsElement);
-});
+ });
 
 //добавляет в разметку карточку через popup
 function handleSubmitImageForm (evt) {
   evt.preventDefault();
-  const addCardsElement = elementContent.cloneNode(true);
-  addCardsElement.querySelector('.element__text').textContent = imageName.value;
-  addCardsElement.querySelector('.element__image').src = imageLink.value;
-  addCardsElement.querySelector('.element__image').alt = imageName.value;
 
-  //добавляет возможность ставить лайк на карточках
-  addCardsElement.querySelector('.element__button').addEventListener('click', function (evt) {
-    evt.target.classList.toggle('element__button_active')
-  });
+  createCards(imageName.value, imageLink.value);
 
-  //добавляет возможность удалять карточки по клику на урну
-  addCardsElement.querySelector('.element__button-delite').addEventListener('click', function(evt) {
-    const target = evt.target;
-    const removeButton = target.closest('.element');
-    removeButton.remove();
-  });
-
-  //передаёт картинку карточки в попап по клику
-  addCardsElement.querySelector('.element__image').addEventListener('click', function(evt){
-    popupImgSrc.src = evt.target.src;
-    popupImgSrc.alt = evt.name;
-  });
-
-  //открывает попап по клику картинки в карточках
-  addCardsElement.querySelector('.element__image').addEventListener('click', function(evt){
-    openPopup(popupImgOpen);
-    const targetElement = evt.target.closest('.element');
-    const targetText = targetElement.querySelector('.element__text');
-    popupImgText.textContent = targetText.textContent;
-  });
-
-  cardsContainer.prepend(addCardsElement);
+  cardsContainer.prepend(cardsElement);
   handleClickClosePopupImgageEditForm();
 };
 
