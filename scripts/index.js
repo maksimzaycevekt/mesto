@@ -59,11 +59,15 @@ function handleSubmitProfileFormInput (evt) {
 // ф-я открытия попапа для модальных окон
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('mousedown', popupCloseClickOverlay)
+  document.addEventListener('keydown', popupClosePressEscape)
 }
 
 // ф-я заккрытия попапа для модальных окон
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('mousedown', popupCloseClickOverlay)
+  document.removeEventListener('keydown', popupClosePressEscape)
 }
 
 //ф-я открытия попапа для ред. профиля
@@ -148,6 +152,19 @@ function handleSubmitImageForm (evt) {
   handleClickClosePopupImgageEditForm();
 };
 
+//ф-я закрытия попапа по клику оверлея
+function popupCloseClickOverlay(evt) {
+  if (evt.target.classList.contains('popup_opened')) {
+    evt.target.closest('.popup').classList.remove('popup_opened');
+  }
+}
+
+//ф-я закрытия попапа ппо нажатию Escape
+function popupClosePressEscape(evt) {
+  if (evt.key === 'Escape') {
+    document.querySelector('.popup_opened').classList.remove('popup_opened');
+  }
+}
 
 //слушатели для попапа ред профиля
 buttonOpenPopupProfileForm.addEventListener('click', handleClickOpenPopupProfileForm);
@@ -165,18 +182,3 @@ formElementImg.addEventListener('submit', handleSubmitImageForm);
 
 //слушатель для попапа с картинкой
 popupImgClose.addEventListener('click', handleCkickClosePopupImageModalWindow);
-
-//закрывает попап по клику на оверлее
-document.addEventListener('mousedown', (evt) => {
-  if (evt.target.classList.contains('popup_opened')) {
-    evt.target.closest('.popup').classList.remove('popup_opened');
-  }
-})
-
-//закрывает попап по нажатию escape
-document.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
-    document.querySelector('.popup_opened').classList.remove('popup_opened');
-  }
-})
-
