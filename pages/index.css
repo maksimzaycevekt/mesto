@@ -17,10 +17,13 @@
 @import url(../blocks/popup/__form/popup__form.css);
 @import url(../blocks/popup/__text/popup__text.css);
 @import url(../blocks/popup/__input/popup__input.css);
+@import url(../blocks/popup/__input/_type/popup__input_type_error.css);
 @import url(../blocks/popup/__button/popup__button.css);
 @import url(../blocks/popup/__image/popup__image.css);
 @import url(../blocks/popup/__text/_type/popup__text_type_img.css);
 @import url(../blocks/popup/_type/popup_type_img.css);
+@import url(../blocks/popup/__input-error/popup__input-error.css);
+@import url(../blocks/popup/__button/_inactive/popup__button_inactive.css);
 
 
 @import url(../blocks/header/header.css);

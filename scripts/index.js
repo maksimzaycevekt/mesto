@@ -29,7 +29,7 @@ const cardsContainer = document.querySelector('.elements');
 const elementContent = document.querySelector('.element-template').content;
 const popupProfile = document.querySelector('#popup-profile');
 const popupImg = document.querySelector('#popup-images');
-const popupProfileForm = document.querySelector('#popup-form-profile');
+const popupProfileForm = document.querySelector('#profile-name-input');
 const buttonOpenPopupProfileForm = document.querySelector('.profile__button');
 const buttonClosePopupProfileForm = document.querySelector('#close-popup-profile');
 const nameInput = document.querySelector('.popup__input_type_name');
@@ -45,6 +45,8 @@ const popupImgOpen = document.querySelector('#popup-img-open');
 const popupImgClose = document.querySelector('#close-popup-window');
 const popupImgSrc = document.querySelector('.popup__image');
 const popupImgText = document.querySelector('.popup__text_type_img');
+const popupList = document.querySelectorAll('.popup');
+const popupContainer = document.querySelectorAll('.popup__container');
 
 // передаёт данные input-ов в разметку
 function handleSubmitProfileFormInput (evt) {
@@ -93,19 +95,19 @@ function handleCkickClosePopupImageModalWindow() {
 
 
 //ф-я создания карточки
-function createCards(name, link) {
+function createCard(name, link) {
   cardsElement = elementContent.cloneNode(true);
   cardsElement.querySelector('.element__text').textContent = name;
   cardsElement.querySelector('.element__image').src = link;
   cardsElement.querySelector('.element__image').alt = name;
 
 //добавляет возможность ставить лайк на карточках
-cardsElement.querySelector('.element__button').addEventListener('click', function (evt) {
-  evt.target.classList.toggle('element__button_active')
+cardsElement.querySelector('.element__button').addEventListener('click', function(evt){
+  evt.target.classList.toggle('element__button_active');
 });
 
 //добавляет возможность удалять карточки по клику на урну
-cardsElement.querySelector('.element__button-delite').addEventListener('click', function(evt) {
+cardsElement.querySelector('.element__button-delite').addEventListener('click', function(evt){
   const target = evt.target;
   const removeButton = target.closest('.element');
   removeButton.remove();
@@ -131,7 +133,7 @@ cardsElement.querySelector('.element__image').addEventListener('click', function
 //интегрирует в разметку карточки из массива через DOM
 initialCards.forEach(function (element) {
 
-  createCards(element.name, element.link)
+  createCard(element.name, element.link)
 
   cardsContainer.append(cardsElement);
  });
@@ -140,11 +142,12 @@ initialCards.forEach(function (element) {
 function handleSubmitImageForm (evt) {
   evt.preventDefault();
 
-  createCards(imageName.value, imageLink.value);
+  createCard(imageName.value, imageLink.value);
 
   cardsContainer.prepend(cardsElement);
   handleClickClosePopupImgageEditForm();
 };
+
 
 //слушатели для попапа ред профиля
 buttonOpenPopupProfileForm.addEventListener('click', handleClickOpenPopupProfileForm);
@@ -162,3 +165,18 @@ formElementImg.addEventListener('submit', handleSubmitImageForm);
 
 //слушатель для попапа с картинкой
 popupImgClose.addEventListener('click', handleCkickClosePopupImageModalWindow);
+
+//закрывает попап по клику на оверлее
+document.addEventListener('mousedown', (evt) => {
+  if (evt.target.classList.contains('popup_opened')) {
+    evt.target.closest('.popup').classList.remove('popup_opened');
+  }
+})
+
+//закрывает попап по нажатию escape
+document.addEventListener('keydown', (evt) => {
+  if (evt.key === 'Escape') {
+    document.querySelector('.popup_opened').classList.remove('popup_opened');
+  }
+})
+
