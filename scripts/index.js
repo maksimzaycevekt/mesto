@@ -59,15 +59,15 @@ function handleSubmitProfileFormInput (evt) {
 // ф-я открытия попапа для модальных окон
 function openPopup(popup) {
   popup.classList.add('popup_opened');
-  document.addEventListener('mousedown', popupCloseClickOverlay)
-  document.addEventListener('keydown', popupClosePressEscape)
+  document.addEventListener('mousedown', сlosePopupClickOverlay)
+  document.addEventListener('keydown', closePopupPressEscape)
 }
 
 // ф-я заккрытия попапа для модальных окон
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
-  document.removeEventListener('mousedown', popupCloseClickOverlay)
-  document.removeEventListener('keydown', popupClosePressEscape)
+  document.removeEventListener('mousedown', closePopupClickOverlay)
+  document.removeEventListener('keydown', closePopupPressEscape)
 }
 
 //ф-я открытия попапа для ред. профиля
@@ -135,7 +135,7 @@ cardsElement.querySelector('.element__image').addEventListener('click', function
 }
 
 //интегрирует в разметку карточки из массива через DOM
-initialCards.forEach(function (element) {
+initialCards.forEach(function(element) {
 
   createCard(element.name, element.link)
 
@@ -143,7 +143,7 @@ initialCards.forEach(function (element) {
  });
 
 //добавляет в разметку карточку через popup
-function handleSubmitImageForm (evt) {
+function handleSubmitImageForm(evt) {
   evt.preventDefault();
 
   createCard(imageName.value, imageLink.value);
@@ -153,14 +153,14 @@ function handleSubmitImageForm (evt) {
 };
 
 //ф-я закрытия попапа по клику оверлея
-function popupCloseClickOverlay(evt) {
+function сlosePopupClickOverlay(evt) {
   if (evt.target.classList.contains('popup_opened')) {
     evt.target.closest('.popup').classList.remove('popup_opened');
   }
 }
 
 //ф-я закрытия попапа ппо нажатию Escape
-function popupClosePressEscape(evt) {
+function closePopupPressEscape(evt) {
   if (evt.key === 'Escape') {
     document.querySelector('.popup_opened').classList.remove('popup_opened');
   }
