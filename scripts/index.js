@@ -47,6 +47,7 @@ const popupImgSrc = document.querySelector('.popup__image');
 const popupImgText = document.querySelector('.popup__text_type_img');
 const popupList = document.querySelectorAll('.popup');
 const popupContainer = document.querySelectorAll('.popup__container');
+const popupImgButton = popupImg.querySelector('.popup__button');
 
 // передаёт данные input-ов в разметку
 function handleSubmitProfileFormInput (evt) {
@@ -63,10 +64,10 @@ function openPopup(popup) {
   document.addEventListener('keydown', closePopupPressEscape)
 }
 
-// ф-я заккрытия попапа для модальных окон
+// ф-я закрытия попапа для модальных окон
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
-  document.removeEventListener('mousedown', closePopupClickOverlay)
+  document.removeEventListener('mousedown', сlosePopupClickOverlay)
   document.removeEventListener('keydown', closePopupPressEscape)
 }
 
@@ -85,6 +86,10 @@ function handleClickClosePopupProfileForm() {
 //ф-я открытия для формы ред картинок
 function handlClickeOpenPopupImgageEditForm() {
   openPopup(popupImg);
+  imageName.value = '';
+  imageLink.value = '';
+  popupImgButton.setAttribute('disabled', 'disabled');
+  popupImgButton.classList.add('popup__button_inactive')
 }
 
 //ф-я закрытия попапа для формы ред картинок
@@ -107,19 +112,19 @@ function createCard(name, link) {
   elementImage.alt = name;
 
 //добавляет возможность ставить лайк на карточках
-cardsElement.querySelector('.element__button').addEventListener('click', function(evt){
+cardsElement.querySelector('.element__button').addEventListener('click', function(evt) {
   evt.target.classList.toggle('element__button_active');
 });
 
 //добавляет возможность удалять карточки по клику на урну
-cardsElement.querySelector('.element__button-delite').addEventListener('click', function(evt){
+cardsElement.querySelector('.element__button-delite').addEventListener('click', function(evt) {
   const target = evt.target;
   const removeButton = target.closest('.element');
   removeButton.remove();
 });
 
 //открывает попап по клику картинки в карточках
-elementImage.addEventListener('click', function(evt){
+elementImage.addEventListener('click', function(evt) {
   popupImgSrc.src = link;
   popupImgSrc.alt = name;
   const targetElement = evt.target.closest('.element');
@@ -145,26 +150,20 @@ function handleSubmitImageForm(evt) {
 
   createCard(imageName.value, imageLink.value);
   cardsContainer.prepend(cardsElement);
-  evt.target.reset();
   handleClickClosePopupImgageEditForm();
 };
-
-//универсальная ф-я закрытия попапа
-function closePopupClickAndEscape() {
-  document.querySelector('.popup_opened').classList.remove('popup_opened');
-}
 
 //ф-я закрытия попапа по клику оверлея
 function сlosePopupClickOverlay(evt) {
   if (evt.target.classList.contains('popup_opened')) {
-    closePopupClickAndEscape();
+    closePopup(document.querySelector(".popup_opened"));
   }
 }
 
 //ф-я закрытия попапа ппо нажатию Escape
 function closePopupPressEscape(evt) {
   if (evt.key === 'Escape') {
-    closePopupClickAndEscape();
+    closePopup(document.querySelector(".popup_opened"));
   }
 }
 
