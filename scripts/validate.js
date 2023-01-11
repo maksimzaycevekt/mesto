@@ -1,74 +1,87 @@
-
-const showInputError = (formElement, inputElement, errorMessage, config) => {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.add(config.inputErrorClass);
-  errorElement.textContent = errorMessage;
-};
-
-const hideInputError = (formElement, inputElement, config) => {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.remove(config.inputErrorClass);
-  errorElement.textContent = '';
-};
-
-//принимает форму и элемент input, выполняет проверку на валидность
-const isValid = (formElement, inputElement, config) => {
-  if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage, config);
-  } else {
-    hideInputError(formElement, inputElement, config);
-  }
-};
-
-//условие для валидации
-const hasInvalidInput = (inputList) => {
-  return inputList.some((inputElement,) => {
-    return !inputElement.validity.valid;
-  })
-};
-
-//переключает класс для кнопки
-const toggleButtonState = (inputList, buttonElement, config) => {
-  if (hasInvalidInput(inputList, config)) {
-    buttonElement.classList.add(config.inactiveButtonClass);
-    buttonElement.setAttribute("disabled", "disabled");
-  } else {
-    buttonElement.classList.remove(config.inactiveButtonClass);
-    buttonElement.removeAttribute("disabled");
-  }
-};
-
-//добавляет обработчики всем полям формы
-const setEventListeners = (formElement, config) => {
-  const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
-  const buttonElement = formElement.querySelector(config.buttonSelector);
-
-  toggleButtonState(inputList, buttonElement, config);
-
-  inputList.forEach((inputElement) => {
-    inputElement.addEventListener("input", () => {
-      isValid(formElement, inputElement, config)
-      toggleButtonState(inputList, buttonElement, config);
-    });
-  });
-};
-
-//включает валидацию для всех форм
-const enableValidation = (config) => {
-  const formList = Array.from(document.querySelectorAll(config.formSelector));
-
-  formList.forEach((formElement) => {
-    setEventListeners(formElement, config);
-  });
-};
-
-//вызываем функцию
-enableValidation({
+//конфиг для валидации
+export const enableValidation = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   buttonSelector: '.popup__button',
   inactiveButtonClass: 'popup__button_inactive',
   inputErrorClass: 'popup__input_type_error'
-});
+};
+
+//создать класс, конструктор принимает на вход конфиг и форму для валидации
+//экспортировать класс
+export class FormValidation {
+  constructor(enableValidation, formElement) {
+    this._enableValidation = enableValidation;
+    this._formElement = formElement;
+    this._inputList = Array.from(this._formElement.querySelectorAll(this._enableValidation.inputSelector));
+    this._buttonElement = this._formElement.querySelector(this._enableValidation.buttonSelector);
+  };
+
+  //показать сообщение об ошибке
+  _showInputError(inputElement, errorMessage) {
+    const errorElement = this._formElement.querySelector(`.${inputElement.id}-error`);
+    inputElement.classList.add(this._enableValidation.inputErrorClass);
+    errorElement.textContent = errorMessage;
+  };
+
+  //скрыть сообщение об ошибке
+  _hideInputError(inputElement) {
+    const errorElement = this._formElement.querySelector(`.${inputElement.id}-error`);
+    inputElement.classList.remove(this._enableValidation.inputErrorClass);
+    errorElement.textContent = '';
+  };
+
+  //если валидация не пройдена показать сообщение об ошибке, иначе скрыть его
+  _isValid(inputElement) {
+    if (!inputElement.validity.valid) {
+      this._showInputError(inputElement, inputElement.validationMessage);
+    } else {
+      this._hideInputError(inputElement);
+    }
+  };
+
+  //найти невалидное поле
+  _hasInvalidInput() {
+    return this._inputList.some((inputElement) => {
+      return !inputElement.validity.valid;
+    })
+  };
+
+  //переключить состояние кнопки на неактивное если есть невалидное поле иначе отключить неактивное состояние
+  _toggleButtonState() {
+    if (this._hasInvalidInput(this._inputList)) {
+      this._buttonElement.classList.add(this._enableValidation.inactiveButtonClass);
+      this._buttonElement.setAttribute("disabled", "disabled");
+    } else {
+      this._buttonElement.classList.remove(this._enableValidation.inactiveButtonClass);
+      this._buttonElement.removeAttribute("disabled");
+    }
+  };
+
+  //добавить слушатели
+  _setEventListeners() {
+    this._toggleButtonState();
+    this._inputList.forEach((inputElement) => {
+      inputElement.addEventListener("input", () => {
+        this._isValid(inputElement);
+        this._toggleButtonState();
+      });
+    });
+  }
+
+  //включить валидацию
+  enableValidation() {
+    const formList = Array.from(document.querySelectorAll(this._enableValidation.formSelector));
+    formList.forEach(() => {
+        this._formElement.addEventListener("submit", (evt) => {
+            evt.preventDefault();
+        });
+        this._setEventListeners();
+    });
+  }
+}
+
+
+
 
 
