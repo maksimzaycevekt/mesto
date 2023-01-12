@@ -1,12 +1,3 @@
-//конфиг для валидации
-export const enableValidation = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  buttonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_inactive',
-  inputErrorClass: 'popup__input_type_error'
-};
-
 //создать класс, конструктор принимает на вход конфиг и форму для валидации
 //экспортировать класс
 export class FormValidation {
@@ -50,8 +41,7 @@ export class FormValidation {
   //переключить состояние кнопки на неактивное если есть невалидное поле иначе отключить неактивное состояние
   _toggleButtonState() {
     if (this._hasInvalidInput(this._inputList)) {
-      this._buttonElement.classList.add(this._enableValidation.inactiveButtonClass);
-      this._buttonElement.setAttribute("disabled", "disabled");
+      this.inactiveButton();
     } else {
       this._buttonElement.classList.remove(this._enableValidation.inactiveButtonClass);
       this._buttonElement.removeAttribute("disabled");
@@ -78,6 +68,11 @@ export class FormValidation {
         });
         this._setEventListeners();
     });
+  }
+
+  inactiveButton() {
+    this._buttonElement.classList.add(this._enableValidation.inactiveButtonClass);
+      this._buttonElement.setAttribute("disabled", "disabled");
   }
 }
 
