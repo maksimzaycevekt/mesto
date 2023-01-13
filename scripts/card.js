@@ -1,4 +1,5 @@
 import {openPopup} from "./utils.js"; //Импортируем функцию открытия попапа
+import { popupImgOpen } from "./index.js";
 
 //Создаём класс Card. В конструкторе на входе object - массив. Name и link присваиваем значения объекта массива.
 //Like, remove и element присваиваем null чтобы потом использовать в методах.
@@ -28,7 +29,7 @@ export class Card {
         popupImg.src = this._link;
         popupImg.alt = this._name;
         popupText.textContent = this._element.querySelector('.element__text').textContent;
-        openPopup(document.querySelector('#popup-img-open'))
+        openPopup(popupImgOpen);
     }
 
     //Метод добавляет слушатели на кнопки лайка, удаления и обработчик клика на картинку
@@ -51,7 +52,7 @@ export class Card {
 
     //Возвращает template
     _getTemplate() {
-      const cardTemplate = document.querySelector('.element-template').content
+      const cardTemplate = this._templateSelector.content
       .querySelector('.element')
       .cloneNode(true);
 

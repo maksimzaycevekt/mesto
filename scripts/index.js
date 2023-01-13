@@ -1,4 +1,4 @@
-import { Card } from "./card.js";
+import { Card } from "./Card.js";
 import { FormValidation } from "./FormValidator.js";
 import { initialCards, enableValidation } from "./constans.js";
 import { openPopup } from "./utils.js";
@@ -17,9 +17,8 @@ const buttonCloseImg = document.querySelector('#close-popup-images');
 const formElementImg = document.querySelector('.popup__form-image');
 const imageName = document.querySelector('.popup__input_type_image-name');
 const imageLink = document.querySelector('.popup__input_type_image-link');
-const popupImgOpen = document.querySelector('#popup-img-open');
+export const popupImgOpen = document.querySelector('#popup-img-open');
 const popupImgClose = document.querySelector('#close-popup-window');
-const popupImgButton = popupImg.querySelector('.popup__button');
 
 //создать класс для попапа ред профиля и включить валидацию
 const popupProfileValidation = new FormValidation(enableValidation, popupProfile);
@@ -31,7 +30,7 @@ popupImgValidation.enableValidation();
 
 //Перебирает массив и создает новый класс с карточкой с помощью метода generateCard()
 initialCards.forEach((item) => {
-  const card = new Card(item);
+  const card = new Card(item, document.querySelector('.element-template'));
   const cardGenerate = card.generateCard();
   document.querySelector('.elements').append(cardGenerate);
 });
@@ -84,7 +83,7 @@ function handleCkickClosePopupImageModalWindow() {
 //создать новую карточку передав в неё объект и добавить её в начало списка
 function createPopupCard(object) {
   object.forEach((item) => {
-    const card = new Card(item);
+    const card = new Card(item, document.querySelector('.element-template'));
     const cardGenerate = card.generateCard();
     document.querySelector('.elements').prepend(cardGenerate);
   });
