@@ -57,7 +57,7 @@ export class FormValidation {
         this._toggleButtonState();
       });
     });
-  }
+  };
 
   //включить валидацию
   enableValidation() {
@@ -68,12 +68,25 @@ export class FormValidation {
         });
         this._setEventListeners();
     });
-  }
+  };
 
   inactiveButton() {
     this._buttonElement.classList.add(this._enableValidation.inactiveButtonClass);
       this._buttonElement.setAttribute("disabled", "disabled");
-  }
+  };
+
+  //публичный метод, сбрасывает валидацию для всех попапов при открытии
+  resetInputError() {
+    const inputList = Array.from(document.querySelectorAll('.popup__input'));
+    inputList.forEach((item) => {
+      item.classList.remove('popup__input_type_error');
+    });
+
+    const spanList = Array.from(document.querySelectorAll('.popup__input-error'));
+    spanList.forEach((item) => {
+      item.textContent = '';
+    });
+  };
 }
 
 

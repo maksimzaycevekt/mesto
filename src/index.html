@@ -4,7 +4,6 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./pages/index.css">
     <title>Место</title>
   </head>
 
@@ -30,9 +29,9 @@
           <button class="popup__close-button" id="close-popup-images" type="button" aria-label="Закрыть"></button>
           <h2 class="popup__text">Новое место</h2>
           <form class="popup__form popup__form-image" id="popup-form-card" name="popup-form" novalidate>
-            <input class="popup__input popup__input_type_image-name" id="card-name" type="text" name="popup-mesto" minlength="2" maxlength="30" placeholder="Название" required>
+            <input class="popup__input popup__input_type_image-name" id="card-name" type="text" name="popup_mesto" minlength="2" maxlength="30" placeholder="Название" required>
             <span class="popup__input-error card-name-error"></span>
-            <input class="popup__input popup__input_type_image-link" id="card-url" type="url" name="popup-link" placeholder="Ссылка на картинку" required>
+            <input class="popup__input popup__input_type_image-link" id="card-url" type="url" name="popup_link" placeholder="Ссылка на картинку" required>
             <span class="popup__input-error card-url-error"></span>
             <button class="popup__button" type="submit">Создать</button>
           </form>
@@ -41,19 +40,19 @@
 
       <div class="popup popup_type_img" id="popup-img-open">
         <div class="popup__container popup__container_type_image">
-          <img class="popup__image" src="./images/element-elbrus.png">
+          <img class="popup__image" src="<%=require('./images/element-elbrus.png')%>">
           <p class="popup__text popup__text_type_img"></p>
           <button class="popup__close-button" id="close-popup-window" type="button" aria-label="Закрыть"></button>
         </div>
       </div>
 
       <header class="header">
-        <img class="header__logo" src="./images/header-logo.svg" alt="Место">
+        <img class="header__logo" src="<%=require('./images/header-logo.svg')%>" alt="Место">
       </header>
 
       <main>
         <section class="profile">
-          <img class="profile__avatar" src="./images/profile-avatar.png" alt="Жак-Ив Кусто">
+          <img class="profile__avatar" src="<%=require('./images/profile-avatar.png')%>" alt="Жак-Ив Кусто">
           <div class="profile__info">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
             <button class="profile__button" type="button" aria-label="Редактировать"></button>

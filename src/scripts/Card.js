@@ -1,5 +1,4 @@
-import {openPopup} from "./utils.js"; //Импортируем функцию открытия попапа
-import { popupImgOpen } from "./index.js";
+import { handleCardClick } from "./utils.js"
 
 //Создаём класс Card. В конструкторе на входе object - массив. Name и link присваиваем значения объекта массива.
 //Like, remove и element присваиваем null чтобы потом использовать в методах.
@@ -11,6 +10,7 @@ export class Card {
       this._remove = null;
       this._element = null;
       this._templateSelector = templateSelector;
+      this._object = object;
     }
 
     //Методы для обработчиков событий _setEventListeners
@@ -24,12 +24,7 @@ export class Card {
     }
 
     _handleClickOpenCard() {
-      const popupImg = document.querySelector('.popup__image');
-        const popupText = document.querySelector('.popup__text_type_img');
-        popupImg.src = this._link;
-        popupImg.alt = this._name;
-        popupText.textContent = this._element.querySelector('.element__text').textContent;
-        openPopup(popupImgOpen);
+      handleCardClick(this._object);
     }
 
     //Метод добавляет слушатели на кнопки лайка, удаления и обработчик клика на картинку
