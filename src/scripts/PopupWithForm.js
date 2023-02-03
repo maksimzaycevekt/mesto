@@ -26,12 +26,17 @@ export class PopupWithForm extends Popup {
     this._popupForm.reset(); //добавлен сброс формы после закрытия
   }
 
+  setInputValues(inputValues) {
+    console.log(inputValues)
+    Object.values(this._inputList).forEach((input) => input.value = inputValues[input.name]);
+  }
+
   setEventListeners() {
     super.setEventListeners();
     this._selector.addEventListener('submit', (evt) => {
       evt.preventDefault();
       this._getInputValues()
-      this._handleFormSubmit(this._formValues);
+      this._handleFormSubmit(this._getInputValues());
       this.close();
     });
   }

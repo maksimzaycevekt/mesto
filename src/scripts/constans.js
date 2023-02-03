@@ -34,3 +34,14 @@ export const enableValidation = {
   inactiveButtonClass: 'popup__button_inactive',
   inputErrorClass: 'popup__input_type_error'
 };
+
+//объект с селекторами профиля для глобального класса userInfo
+export const userInfoObject = {
+  name: '.profile__title',
+  info: '.profile__subtitle'
+}
+
+export const popupProfile = document.querySelector('#popup-profile');
+export const popupImg = document.querySelector('#popup-images');
+export const buttonOpenPopupProfileForm = document.querySelector('.profile__button');
+export const buttonOpenImg = document.querySelector('.profile__add-button');

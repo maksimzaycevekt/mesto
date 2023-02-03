@@ -6,29 +6,36 @@ import { initialCards, enableValidation } from "./constans.js";
 import { PopupWithImage } from "./PopupWithImage.js";
 import { PopupWithForm } from "./PopupWithForm.js"
 import { UserInfo } from "./UserInfo.js";
+import { popupProfile, popupImg, buttonOpenPopupProfileForm, buttonOpenImg, userInfoObject } from "./constans.js";
 
-const popupProfile = document.querySelector('#popup-profile');
-const popupImg = document.querySelector('#popup-images');
-const buttonOpenPopupProfileForm = document.querySelector('.profile__button');
-const buttonOpenImg = document.querySelector('.profile__add-button');
-export const popupImgOpen = document.querySelector('#popup-img-open');
-const containerElement = document.querySelector('.elements');
+const userInfo = new UserInfo(userInfoObject);
 
 //Попап для ред. профиля
-const popupWithProfileForm = new PopupWithForm(popupProfile, () => {
-  const popupProfileValue = {
-    name: document.querySelector('.popup__input_type_name').value,
-    info: document.querySelector('.popup__input_type_job').value
-  }
-  const popupUserInfo = new UserInfo(popupProfileValue);
-  popupUserInfo.getUserInfo();
-  popupUserInfo.setUserInfo();
+const popupWithProfileForm = new PopupWithForm('#popup-profile', (_handleFormSubmit) => {
+  userInfo.setUserInfo(_handleFormSubmit);
   popupProfileValidation.resetInputError();
 });
+
 popupWithProfileForm.setEventListeners();
 
+//Создаёт экземпляр карточки
+//items принимает массив данных
+//renderer содержит функцию отрисовки данных на странице
+//containerElement - селектор контейнера в который добавятся элементы.
+const generateCard = new Section({
+  items: initialCards,
+  renderer: (cardInfo) => {
+    const card = new Card(cardInfo, document.querySelector('.element-template'), (object) => {popupWithImage.open(object)});
+    card.addCard(generateCard);
+   }
+  },
+  '.elements');
+
+//Отрисовывает все элементы переданные в generateCard
+generateCard.renderElements();
+
 //попап для добавления картинок
-const popupWithAddImageForm = new PopupWithForm(popupImg, (object) => {
+const popupWithAddImageForm = new PopupWithForm('#popup-images', (object) => {
   const objectName = object.popup_mesto;
   const objectLink = object.popup_link;
 
@@ -36,15 +43,16 @@ const popupWithAddImageForm = new PopupWithForm(popupImg, (object) => {
     name: objectName,
     link: objectLink
   }
-  const card = new Card(objectCradInfo, document.querySelector('.element-template'));
-  const cardGenerate = card.generateCard();
-  document.querySelector('.elements').prepend(cardGenerate);
+  const card = new Card(objectCradInfo, document.querySelector('.element-template'), (object) => {popupWithImage.open(object)});
+  card.addCard(generateCard);
   popupImgValidation.resetInputError();
 });
+
+//навесить слушатели на попап
 popupWithAddImageForm.setEventListeners();
 
 //попап с картинкой (открывается по клику на картинку)
-export const popupWithImage = new PopupWithImage(popupImgOpen);
+export const popupWithImage = new PopupWithImage('#popup-img-open');
 popupWithImage.setEventListeners();
 
 //создать класс для попапа ред профиля и включить валидацию
@@ -55,26 +63,9 @@ popupProfileValidation.enableValidation();
 const popupImgValidation = new FormValidation(enableValidation, popupImg);
 popupImgValidation.enableValidation();
 
-//Создаёт экземпляр карточки
-//items принимает массив данных
-//renderer содержит функцию отрисовки данных на странице
-//containerElement - селектор контейнера в который добавятся элементы.
-const generateCard = new Section({
-  items: initialCards,
-  renderer: (cardInfo) => {
-    const card = new Card(cardInfo, document.querySelector('.element-template'));
-    const cardGenerate = card.generateCard();
-    generateCard.addItem(cardGenerate);
-   }
-  },
-  containerElement);
-
-//Отрисовывает все элементы переданные в generateCard
-generateCard.renderElements();
-
 //слушатели для попапа ред профиля
 //коллбэк вызывает метод открытия попапа и сбрасывает валидацию
-buttonOpenPopupProfileForm.addEventListener('click', () => {popupWithProfileForm.open(), popupProfileValidation.resetInputError()});
+buttonOpenPopupProfileForm.addEventListener('click', () => {popupWithProfileForm.open(), popupProfileValidation.resetInputError(), popupWithProfileForm.setInputValues(userInfo.getUserInfo())});
 
 //слушатели для попапа ред картинок
 //коллбэк вызывает метод открытия попапа и сбрасывает валидацию

@@ -3,7 +3,7 @@ export class Section {
   constructor({items, renderer}, selector) {
     this._items = items;
     this._render = renderer;
-    this._selector = selector;
+    this._selector = document.querySelector(selector);
   };
 
   //отрисовка всех элементов

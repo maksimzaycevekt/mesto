@@ -51,6 +51,12 @@ export class FormValidation {
   //добавить слушатели
   _setEventListeners() {
     this._toggleButtonState();
+
+    this._formElement.addEventListener('reset', () => {
+      //`setTimeout` чтобы дождаться очищения формы (вызов уйдет в конце стека) и только потом вызов `toggleButtonState`
+      setTimeout(() => {this._toggleButtonState()}, 0); // указать 0 миллисекунд, чтобы действие сработало после `reset`
+    });
+
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener("input", () => {
         this._isValid(inputElement);
@@ -61,13 +67,11 @@ export class FormValidation {
 
   //включить валидацию
   enableValidation() {
-    const formList = Array.from(document.querySelectorAll(this._enableValidation.formSelector));
-    formList.forEach(() => {
-        this._formElement.addEventListener("submit", (evt) => {
-            evt.preventDefault();
-        });
-        this._setEventListeners();
+    this._formElement.addEventListener("submit", (evt) => {
+      evt.preventDefault();
     });
+
+    this._setEventListeners();
   };
 
   inactiveButton() {
@@ -77,8 +81,7 @@ export class FormValidation {
 
   //публичный метод, сбрасывает валидацию для всех попапов при открытии
   resetInputError() {
-    const inputList = Array.from(document.querySelectorAll('.popup__input'));
-    inputList.forEach((item) => {
+    this._inputList.forEach((item) => {
       item.classList.remove('popup__input_type_error');
     });
 

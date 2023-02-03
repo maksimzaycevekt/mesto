@@ -1,9 +1,7 @@
-import { handleCardClick } from "./utils.js"
-
 //Создаём класс Card. В конструкторе на входе object - массив. Name и link присваиваем значения объекта массива.
 //Like, remove и element присваиваем null чтобы потом использовать в методах.
 export class Card {
-    constructor(object, templateSelector) {
+    constructor(object, templateSelector, handleClickOpenCard) {
       this._name = object.name;
       this._link = object.link;
       this._like = null;
@@ -11,6 +9,7 @@ export class Card {
       this._element = null;
       this._templateSelector = templateSelector;
       this._object = object;
+      this._handleClickOpenCard = handleClickOpenCard;
     }
 
     //Методы для обработчиков событий _setEventListeners
@@ -21,10 +20,6 @@ export class Card {
     _handleClickDeleteCard() {
       this._element.remove();
       this._element = null;
-    }
-
-    _handleClickOpenCard() {
-      handleCardClick(this._object);
     }
 
     //Метод добавляет слушатели на кнопки лайка, удаления и обработчик клика на картинку
@@ -41,7 +36,7 @@ export class Card {
 
       const img = this._element.querySelector('.element__image');
       img.addEventListener('click', () =>{
-        this._handleClickOpenCard();
+        this._handleClickOpenCard(this._object);
       });
     };
 
@@ -54,7 +49,7 @@ export class Card {
       return cardTemplate;
     }
 
-    //Создаёт карточку
+    //Создаёт карточку, возвращает элемент карточки
     generateCard() {
       this._element = this._getTemplate();
       this._element.querySelector('.element__image').src = this._link;
@@ -63,6 +58,11 @@ export class Card {
       this._setEventListeners();
 
       return this._element;
+    }
+
+    //Добавляет карточку на страницу в начало списка
+    addCard(generateCard) {
+      generateCard.addItem(this.generateCard())
     }
   }
 
