@@ -47,7 +47,7 @@ export class Card {
       .cloneNode(true);
 
       return cardTemplate;
-    }
+    };
 
     //Создаёт карточку, возвращает элемент карточки
     generateCard() {
@@ -58,12 +58,7 @@ export class Card {
       this._setEventListeners();
 
       return this._element;
-    }
-
-    //Добавляет карточку на страницу в начало списка
-    addCard(generateCard) {
-      generateCard.addItem(this.generateCard())
-    }
+    };
   }
 
 

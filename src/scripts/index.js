@@ -11,8 +11,8 @@ import { popupProfile, popupImg, buttonOpenPopupProfileForm, buttonOpenImg, user
 const userInfo = new UserInfo(userInfoObject);
 
 //Попап для ред. профиля
-const popupWithProfileForm = new PopupWithForm('#popup-profile', (_handleFormSubmit) => {
-  userInfo.setUserInfo(_handleFormSubmit);
+const popupWithProfileForm = new PopupWithForm('#popup-profile', (userData) => {
+  userInfo.setUserInfo(userData);
   popupProfileValidation.resetInputError();
 });
 
@@ -26,7 +26,7 @@ const generateCard = new Section({
   items: initialCards,
   renderer: (cardInfo) => {
     const card = new Card(cardInfo, document.querySelector('.element-template'), (object) => {popupWithImage.open(object)});
-    card.addCard(generateCard);
+    generateCard.addItem(card.generateCard());
    }
   },
   '.elements');
@@ -44,7 +44,7 @@ const popupWithAddImageForm = new PopupWithForm('#popup-images', (object) => {
     link: objectLink
   }
   const card = new Card(objectCradInfo, document.querySelector('.element-template'), (object) => {popupWithImage.open(object)});
-  card.addCard(generateCard);
+  generateCard.addItem(card.generateCard());
   popupImgValidation.resetInputError();
 });
 
