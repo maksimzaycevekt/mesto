@@ -10,6 +10,9 @@
   <body class="body">
     <div class="page">
 
+      <!-- Попапы -->
+
+      <!-- Попап для редактирования профиля -->
       <div class="popup" id="popup-profile">
         <div class="popup__container">
           <button class="popup__close-button" id="close-popup-profile" type="button" aria-label="Закрыть"></button>
@@ -19,11 +22,12 @@
             <span class="popup__input-error input-profile-name-error"></span>
             <input class="popup__input popup__input_type_job" id="input-profile-job" type="text" name="popup_job" minlength="2" maxlength="200" required>
             <span class="popup__input-error input-profile-job-error"></span>
-            <button class="popup__button" type="submit">Сохранить</button>
+            <button class="popup__button" id="profile-save-button" type="submit">Сохранить</button>
           </form>
         </div>
       </div>
 
+      <!-- Попап для добалвения карточки -->
       <div class="popup" id="popup-images">
         <div class="popup__container">
           <button class="popup__close-button" id="close-popup-images" type="button" aria-label="Закрыть"></button>
@@ -33,11 +37,12 @@
             <span class="popup__input-error card-name-error"></span>
             <input class="popup__input popup__input_type_image-link" id="card-url" type="url" name="popup_link" placeholder="Ссылка на картинку" required>
             <span class="popup__input-error card-url-error"></span>
-            <button class="popup__button" type="submit">Создать</button>
+            <button class="popup__button" id="popup-add-image" type="submit">Создать</button>
           </form>
         </div>
       </div>
 
+      <!-- Попап в котором откроется увеличенная картинка из карточки -->
       <div class="popup popup_type_img" id="popup-img-open">
         <div class="popup__container popup__container_type_image">
           <img class="popup__image" src="<%=require('./images/element-elbrus.png')%>">
@@ -46,13 +51,41 @@
         </div>
       </div>
 
+      <!-- Попап для подтверждения удаления -->
+      <div class="popup" id="popup-delete">
+        <div class="popup__container">
+          <button class="popup__close-button" id="close-popup-profile" type="button" aria-label="Закрыть"></button>
+          <h2 class="popup__text">Вы уверены?</h2>
+          <form class="popup__form" id="profile-name-input" name="popup-form" novalidate>
+            <button class="popup__button" id="delete-card-button" type="submit" aria-label="Удалить">Да</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Попап для смены аватара -->
+      <div class="popup" id="popup-avatar">
+        <div class="popup__container">
+          <button class="popup__close-button" id="close-popup-images" type="button" aria-label="Закрыть"></button>
+          <h2 class="popup__text">Обновить аватар</h2>
+          <form class="popup__form popup__form-image" id="popup-form-avatar" name="popup-form" novalidate>
+            <input class="popup__input popup__input_type_image-link" id="avatar-url" type="url" name="popup_link" placeholder="Ссылка на картинку" required>
+            <span class="popup__input-error avatar-url-error"></span>
+            <button class="popup__button" id="popup-save-avatar" type="submit">Сохранить</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Основная разметка страницы -->
+
       <header class="header">
         <img class="header__logo" src="<%=require('./images/header-logo.svg')%>" alt="Место">
       </header>
 
       <main>
         <section class="profile">
-          <img class="profile__avatar" src="<%=require('./images/profile-avatar.png')%>" alt="Жак-Ив Кусто">
+          <div class="profile__hover">
+            <img class="profile__avatar" src="<%=require('./images/profile-avatar.png')%>" alt="Жак-Ив Кусто">
+          </div>
           <div class="profile__info">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
             <button class="profile__button" type="button" aria-label="Редактировать"></button>
@@ -68,7 +101,10 @@
               <img class="element__image" alt="Описание карточки">
               <div class="element__container">
                 <h2 class="element__text">23</h2>
-                <button class="element__button" type="button" aria-label="Лайк"></button>
+                <div class="element__button-container">
+                  <button class="element__button" type="button" aria-label="Лайк"></button>
+                  <p class="element__button-likes">12</p>
+                </div>
                 <button class="element__button-delite" type="button" aria-label="Удалить"></button>
               </div>
             </article>
@@ -82,7 +118,6 @@
         </footer>
 
     </div>
-    <script type="module" src="./scripts/index.js" defer></script>
   </body>
 
 </html>

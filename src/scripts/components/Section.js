@@ -1,14 +1,14 @@
 //отвечает за отрисовку элементов на страниц
 export class Section {
   constructor({items, renderer}, selector) {
-    this._items = items;
+    this._utems = items
     this._render = renderer;
     this._selector = document.querySelector(selector);
   };
 
   //отрисовка всех элементов
-  renderElements() {
-    this._items.forEach(item => {
+  renderElements(method) {
+    method.forEach(item => {
       this._render(item)
     });
   };

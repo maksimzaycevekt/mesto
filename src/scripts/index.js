@@ -1,72 +1,175 @@
 import '../pages/index.css';
-import { Card } from "./Card.js";
-import { FormValidation } from "./FormValidator.js";
-import { Section } from "./Section.js";
-import { initialCards, enableValidation } from "./constans.js";
-import { PopupWithImage } from "./PopupWithImage.js";
-import { PopupWithForm } from "./PopupWithForm.js"
-import { UserInfo } from "./UserInfo.js";
-import { popupProfile, popupImg, buttonOpenPopupProfileForm, buttonOpenImg, userInfoObject } from "./constans.js";
+import { Card } from "./components/Card.js";
+import { FormValidation } from "./components/FormValidator.js";
+import { Section } from "./components/Section.js";
+import { enableValidation } from "./constans.js";
+import { PopupWithImage } from "./components/PopupWithImage.js";
+import { PopupWithForm } from "./components/PopupWithForm.js"
+import { PopupWithConfirmation } from "./components/PopupWithConfirmation"
+import { UserInfo } from "./components/UserInfo.js";
+import { Api } from './components/Api.js'
+import { popupProfile, popupImg, buttonOpenPopupProfileForm, buttonOpenImg, userInfoObject, profileHover, popupAvatar, profileSaveButton, avatarSaveButton, addImageSaveButton } from "./constans.js";
+import { deleteCard, rendelLoading } from './utils.js';
 
+//класс Api с запросами к серверу
+export const api = new Api({
+  url: 'https://mesto.nomoreparties.co/v1/cohort-58',
+  headers: {
+    authorization: '8296479c-2639-4ad9-a3e8-cb15f60bfcf0',
+    'Content-Type': 'application/json'
+  }
+});
+
+let userId = ""; //переменная для хранения id
+
+//ждёт когда выполнится запрос на получение карточек и информации из профиля
+api.getPromiseAll()
+  .then((values) => {
+    const cards = values[0] //карточки
+    const info = values[1] //информация из профиля
+    userInfo.setUserInfo(info) //добавляет информацию на страницу
+    userInfo.setUserAvatar(info.avatar) //добавляет аватар на страницу
+    userId = info._id // хранит id
+    generateCard.renderElements(cards) //отрисовывает карточки с сервера
+  })
+  .catch((err) => console.log(err))
+
+//взаимодействие с информацией пользователя в профиле
 const userInfo = new UserInfo(userInfoObject);
 
 //Попап для ред. профиля
 const popupWithProfileForm = new PopupWithForm('#popup-profile', (userData) => {
-  userInfo.setUserInfo(userData);
+  rendelLoading(true, profileSaveButton)
+  api.patchInfoUser({userName: userData.popup_name, about: userData.popup_job}) //отправляет обновлённые данные профиля на сервер
+    .then((values) => {userInfo.setUserInfo(values)}) //обновляет данные на странице
+    .catch((err) => console.log(err))
+    .finally(rendelLoading(false, profileSaveButton, 'Сохранить'))
   popupProfileValidation.resetInputError();
 });
-
 popupWithProfileForm.setEventListeners();
 
+//попап для редактирования аватара
+const popupWithAvatar = new PopupWithForm('#popup-avatar', (userData) => {
+  rendelLoading(true, avatarSaveButton)
+  api.changeAvatar(userData.popup_link)
+    .then((values) => {userInfo.setUserAvatar(values.avatar)})
+    .catch((err) => console.log(err))
+    .finally(rendelLoading(false, avatarSaveButton, 'Сохранить'))
+})
+popupWithAvatar.setEventListeners();
+
 //Создаёт экземпляр карточки
-//items принимает массив данных
-//renderer содержит функцию отрисовки данных на странице
-//containerElement - селектор контейнера в который добавятся элементы.
 const generateCard = new Section({
-  items: initialCards,
+  //renderer содержит функцию отрисовки данных на странице
   renderer: (cardInfo) => {
-    const card = new Card(cardInfo, document.querySelector('.element-template'), (object) => {popupWithImage.open(object)});
+    const card = new Card(cardInfo, userId, document.querySelector('.element-template'),
+      {
+        //действие при клике по картинке в карточке
+        handleClickOpenCard: (object) => {popupWithImage.open(object)},
+
+        //действие по нажатию на лайк (при лайке)
+        handleLikeClick: (card) => {
+          if (card.isLiked()) {
+            api.dislikeCard(card.getId())
+            .then((data) => {card.updateLike(data.likes)})
+            .catch((err) => console.log(err))
+          } else {
+            api.likeCard(card.getId())
+            .then((data) => {card.updateLike(data.likes)})
+            .catch((err) => console.log(err))
+          }
+        },
+
+        //действие по нажатию на иконку удаления (урну)
+        handleDeleteIconClick: () =>
+        {
+          popupWithConfirm.handleSubmitFunction(() => {card.handleClickDeleteCard()});
+          popupWithConfirm.open();
+        }
+      },
+      //функция удаления карточки
+      deleteCard
+    );
     generateCard.addItem(card.generateCard());
    }
   },
   '.elements');
-
-//Отрисовывает все элементы переданные в generateCard
-generateCard.renderElements();
 
 //попап для добавления картинок
 const popupWithAddImageForm = new PopupWithForm('#popup-images', (object) => {
   const objectName = object.popup_mesto;
   const objectLink = object.popup_link;
 
-  const objectCradInfo = {
-    name: objectName,
-    link: objectLink
-  }
-  const card = new Card(objectCradInfo, document.querySelector('.element-template'), (object) => {popupWithImage.open(object)});
-  generateCard.addItem(card.generateCard());
+  rendelLoading(true, addImageSaveButton)
+  api.postCard({cardName: objectName, cardLink: objectLink})
+  .then((res) => {
+    const card = new Card(res, userId, document.querySelector('.element-template'),
+      {
+        //действие при клике по картинке в карточке
+        handleClickOpenCard: (object) => {popupWithImage.open(object)},
+
+        //действие по нажатию на лайк (при лайке)
+        handleLikeClick: (card) => {
+          if (card.isLiked()) {
+            api.dislikeCard(card.getId())
+            .then((data) => {card.updateLike(data.likes)})
+            .catch((err) => console.log(err))
+          } else {
+            api.likeCard(card.getId())
+            .then((data) => {card.updateLike(data.likes)})
+            .catch((err) => console.log(err))
+          }
+        },
+
+        //действие по нажатию на иконку удаления (урну)
+        handleDeleteIconClick: () =>
+        {
+          popupWithConfirm.handleSubmitFunction(() => {card.handleClickDeleteCard()});
+          popupWithConfirm.open();
+        }
+      },
+      //функция удаления карточки
+      deleteCard
+    );
+    generateCard.addItem(card.generateCard())
+  })
+  .catch((err) => console.log(err))
+  .finally(rendelLoading(false, addImageSaveButton,'Создать' ))
   popupImgValidation.resetInputError();
 });
-
-//навесить слушатели на попап
 popupWithAddImageForm.setEventListeners();
+
+//попап с предупреждением об удалении карточки
+const popupWithConfirm = new PopupWithConfirmation ('#popup-delete');
+popupWithConfirm.setEventListeners();
 
 //попап с картинкой (открывается по клику на картинку)
 export const popupWithImage = new PopupWithImage('#popup-img-open');
 popupWithImage.setEventListeners();
 
-//создать класс для попапа ред профиля и включить валидацию
+//класс валидации для попапа ред профиля
 const popupProfileValidation = new FormValidation(enableValidation, popupProfile);
 popupProfileValidation.enableValidation();
 
-//создать класс для попапа добавления карточки с картинкой и включить валидацию
+//класс валидации для попапа добавления карточки с картинкой
 const popupImgValidation = new FormValidation(enableValidation, popupImg);
 popupImgValidation.enableValidation();
 
-//слушатели для попапа ред профиля
+//класс валидации для попапа ред аватара
+const popupAvatarValidation = new FormValidation(enableValidation, popupAvatar);
+popupAvatarValidation.enableValidation();
+
+//слушатель для попапа ред профиля
 //коллбэк вызывает метод открытия попапа и сбрасывает валидацию
 buttonOpenPopupProfileForm.addEventListener('click', () => {popupWithProfileForm.open(), popupProfileValidation.resetInputError(), popupWithProfileForm.setInputValues(userInfo.getUserInfo())});
 
-//слушатели для попапа ред картинок
+//слушатель для попапа ред картинок
 //коллбэк вызывает метод открытия попапа и сбрасывает валидацию
 buttonOpenImg.addEventListener('click', () => {popupWithAddImageForm.open(), popupImgValidation.resetInputError()});
+
+//слушатель для открытия попапа с аватаром
+//коллбэк вызывает метод открытия попапа и сбрасывает валидацию
+profileHover.addEventListener('click', () => {popupWithAvatar.open(), popupAvatarValidation.resetInputError()});
+
+
+

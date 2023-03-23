@@ -38,10 +38,21 @@ export const enableValidation = {
 //объект с селекторами профиля для глобального класса userInfo
 export const userInfoObject = {
   name: '.profile__title',
-  info: '.profile__subtitle'
+  info: '.profile__subtitle',
+  avatar: '.profile__avatar'
 }
 
 export const popupProfile = document.querySelector('#popup-profile');
 export const popupImg = document.querySelector('#popup-images');
+export const popupAvatar = document.querySelector('#popup-avatar');
 export const buttonOpenPopupProfileForm = document.querySelector('.profile__button');
 export const buttonOpenImg = document.querySelector('.profile__add-button');
+export const profileAvatar = document.querySelector('.profile__avatar');
+export const profileUserName = document.querySelector('.profile__title');
+export const profileUserJob = document.querySelector('.profile__subtitle');
+export const profileHover = document.querySelector('.profile__hover');
+export const objectCards = null;
+export const profileSaveButton = document.querySelector('#profile-save-button');
+export const avatarSaveButton = document.querySelector('#popup-save-avatar');
+export const addImageSaveButton = document.querySelector('#popup-add-image')
+
