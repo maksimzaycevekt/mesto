@@ -1,13 +1,13 @@
 import '../pages/index.css';
-import { Card } from "./components/Card.js";
-import { FormValidation } from "./components/FormValidator.js";
-import { Section } from "./components/Section.js";
+import { Card } from "../components/Card";
+import { FormValidation } from "../components/FormValidator.js";
+import { Section } from "../components/Section.js";
 import { enableValidation } from "./constans.js";
-import { PopupWithImage } from "./components/PopupWithImage.js";
-import { PopupWithForm } from "./components/PopupWithForm.js"
-import { PopupWithConfirmation } from "./components/PopupWithConfirmation"
-import { UserInfo } from "./components/UserInfo.js";
-import { Api } from './components/Api.js'
+import { PopupWithImage } from "../components/PopupWithImage.js";
+import { PopupWithForm } from "../components/PopupWithForm.js"
+import { PopupWithConfirmation } from "../components/PopupWithConfirmation"
+import { UserInfo } from "../components/UserInfo.js";
+import { Api } from '../components/Api.js'
 import { popupProfile, popupImg, buttonOpenPopupProfileForm, buttonOpenImg, userInfoObject, profileHover, popupAvatar, profileSaveButton, avatarSaveButton, addImageSaveButton } from "./constans.js";
 import { deleteCard, rendelLoading } from './utils.js';
 
