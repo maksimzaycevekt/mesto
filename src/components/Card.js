@@ -1,7 +1,7 @@
 //Создаём класс Card. В конструкторе на входе object - массив. Name и link присваиваем значения объекта массива.
 //Like, remove и element присваиваем null чтобы потом использовать в методах.
 export class Card {
-    constructor(object, userId, templateSelector, {handleClickOpenCard, handleLikeClick, handleDeleteIconClick}, functionDeleteCard) {
+    constructor(object, userId, templateElement, {handleClickOpenCard, handleLikeClick, handleDeleteIconClick}, functionDeleteCard) {
       this._name = object.name;
       this._link = object.link;
       this._likes = object.likes;
@@ -9,7 +9,7 @@ export class Card {
       this._remove = null;
       this._element = null;
       this._object = object;
-      this._templateSelector = templateSelector;
+      this._templateElement = templateElement;
 
       this._handleClickOpenCard = handleClickOpenCard; //функция выполнится при клике на картинку в карточке
       this._handleLikeClick = handleLikeClick; //функция поставит лайк при клике на сердечко
@@ -31,7 +31,7 @@ export class Card {
       this._likes = likesArray
       this._likeCounter.textContent = likesArray.length
 
-      if(this.isLiked()) {
+      if(this.checkLiked()) {
         this._like.classList.toggle('element__button_active')
       } else {
         this._like.classList.toggle('element__button_active')
@@ -39,7 +39,7 @@ export class Card {
     }
 
     //проверяет есть ли в массиве лайков id пользователя (начличие лайка)
-    isLiked() {
+    checkLiked() {
       if (this._likes.some((user) => {return this._userId === user._id})) {
         return true
       } else {
@@ -53,11 +53,12 @@ export class Card {
         .then(() => {
           this._element.remove()
         })
+        .catch((err) => console.log(err))
     };
 
     //Возвращает template
     _getTemplate() {
-      const cardTemplate = this._templateSelector.content
+      const cardTemplate = this._templateElement.content
       .querySelector('.element')
       .cloneNode(true);
 
@@ -66,8 +67,9 @@ export class Card {
 
     //Метод добавляет слушатели на кнопки лайка, удаления и обработчик клика на картинку
     _setEventListeners() {
-      this._likeCounter = this._element.querySelector('.element__button-likes')
+      this._likeCounter = this._element.querySelector('.element__button-likes');
       this._like = this._element.querySelector('.element__button');
+      this._imageElement = this._element.querySelector('.element__image');
 
       //слушатель для лайка
         this._like.addEventListener('click', () => {
@@ -81,19 +83,20 @@ export class Card {
       });
 
       //слушатель для картинки
-      const img = this._element.querySelector('.element__image');
+      const img = this._imageElement;
       img.addEventListener('click', () =>{
         this._handleClickOpenCard(this._object);
       });
     };
 
     //Создаёт карточку, возвращает элемент карточки
-    generateCard() {
-      this._element = this._getTemplate();
-      this._element.querySelector('.element__image').src = this._link;
-      this._element.querySelector('.element__image').alt = this._name;
-      this._element.querySelector('.element__text').textContent = this._name;
-      this._setEventListeners();
+    generateCard(card) {
+      card._element = this._getTemplate();
+      card._setEventListeners();
+      card._imageElement.src = this._link;
+      card._imageElement.alt = this._name;
+      card._element.querySelector('.element__text').textContent = this._name;
+
 
       //отрисовывает количество лайков при создании карточки
       this._likeCounter.textContent = this._likes.length
@@ -102,7 +105,7 @@ export class Card {
       if(!this._isOwnerId) {this._element.querySelector('.element__button-delite').remove();};
 
       //если есть id - активировать лайк
-      if(this.isLiked()) {this._like.classList.add('element__button_active')};
+      if(this.checkLiked()) {this._like.classList.add('element__button_active')};
 
       return this._element;
     };

@@ -1,20 +1,20 @@
 //отвечает за отрисовку элементов на страниц
 export class Section {
-  constructor({items, renderer}, selector) {
+  constructor({items, renderer}, element) {
     this._utems = items
     this._render = renderer;
-    this._selector = document.querySelector(selector);
+    this._element = document.querySelector(element);
   };
 
   //отрисовка всех элементов
-  renderElements(method) {
-    method.forEach(item => {
+  renderElements(items) {
+    items.forEach(item => {
       this._render(item)
     });
   };
 
   //принимает дом элемент и добавляет его в контейнер, где this selector - контейнер.
   addItem(element) {
-    this._selector.prepend(element);
+    this._element.prepend(element);
   };
 };

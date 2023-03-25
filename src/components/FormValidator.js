@@ -81,13 +81,8 @@ export class FormValidation {
 
   //публичный метод, сбрасывает валидацию для всех попапов при открытии
   resetInputError() {
-    this._inputList.forEach((item) => {
-      item.classList.remove('popup__input_type_error');
-    });
-
-    const spanList = Array.from(document.querySelectorAll('.popup__input-error'));
-    spanList.forEach((item) => {
-      item.textContent = '';
+    this._inputList.forEach((inputElement) => {
+      this._hideInputError(inputElement)
     });
   };
 }
