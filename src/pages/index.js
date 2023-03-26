@@ -34,14 +34,17 @@ function createCard(item) {
     //действие по нажатию на иконку удаления (урну)
     handleDeleteIconClick: () =>
     {
-      popupWithConfirm.handleSubmitFunction(() => {card.handleClickDeleteCard()});
+      popupWithConfirm.handleSubmitFunction(() => {
+        card.handleClickDeleteCard(),
+        popupWithConfirm.close()
+      });
       popupWithConfirm.open();
     }
   },
   //функция удаления карточки
   deleteCard
 )
-return card};
+return card.generateCard()};
 
 // содержит api запрос на удаление карточки. функция передаётся аргументом в Card
 function deleteCard(cardId) {
@@ -105,7 +108,7 @@ const cardSection = new Section({
   //renderer содержит функцию отрисовки данных на странице
   renderer: (cardInfo) => {
     const card = createCard(cardInfo)
-    cardSection.addItem(card.generateCard(card));
+    cardSection.addItem(card);
    }
   },
   '.elements');
@@ -119,7 +122,7 @@ const popupWithAddImageForm = new PopupWithForm('#popup-images', (object) => {
   api.postCard({cardName: objectName, cardLink: objectLink})
   .then((res) => {
     const card = createCard(res)
-    cardSection.addItem(card.generateCard(card))
+    cardSection.addItem(card)
     popupWithAddImageForm.close()
   })
   .catch(

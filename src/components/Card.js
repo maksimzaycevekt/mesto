@@ -90,12 +90,12 @@ export class Card {
     };
 
     //Создаёт карточку, возвращает элемент карточки
-    generateCard(card) {
-      card._element = this._getTemplate();
-      card._setEventListeners();
-      card._imageElement.src = this._link;
-      card._imageElement.alt = this._name;
-      card._element.querySelector('.element__text').textContent = this._name;
+    generateCard() {
+      this._element = this._getTemplate();
+      this._setEventListeners();
+      this._imageElement.src = this._link;
+      this._imageElement.alt = this._name;
+      this._element.querySelector('.element__text').textContent = this._name;
 
 
       //отрисовывает количество лайков при создании карточки
